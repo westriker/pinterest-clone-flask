@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - {{ usuario.username }}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        /* Navbar top */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 32px;
+            border-bottom: 1px solid #efefef;
+        }
+
+        .logo {
+            color: #e60023;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .btn-logout {
+            background-color: #efefef;
+            color: #111;
+            padding: 10px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Cabeçalho do Perfil */
+        .profile-header {
+            text-align: center;
+            margin: 40px auto 30px auto;
+            max-width: 600px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #e60023;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            margin: 0 auto 16px auto;
+        }
+
+        h1 { font-size: 32px; margin-bottom: 4px; }
+        p.username { color: #767676; margin-bottom: 20px; }
+
+        /* Formulário de Upload */
+        .upload-section {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 16px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .upload-section input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        .btn-upload {
+            background-color: #e60023;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Galeria Estilo Pinterest (Grid) */
+        .gallery-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .grid-item {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f0f0f0;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #767676;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">📌 Pinterest Clone</a>
+        <a href="{{ url_for('logout') }}" class="btn-logout">Sair</a>
+    </header>
+
+    <div class="profile-header">
+        <div class="avatar">{{ usuario.username[0].upper() }}</div>
+        <h1>{{ usuario.username }}</h1>
+        <p class="username">{{ usuario.email }}</p>
+
+        {% if form_foto %}
+            <div class="upload-section">
+                <h3>Criar Novo Pin 📸</h3>
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form_foto.csrf_token }}
+                    {{ form_foto.foto() }}
+                    <br>
+                    {{ form_foto.botao_confirmacao(class="btn-upload") }}
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #efefef; margin-bottom: 30px;">
+
+    <div class="gallery-container">
+        {% if usuario.fotos %}
+            <div class="grid">
+                {% for foto in usuario.fotos %}
+                    <div class="grid-item">
+                        <img src="{{ url_for('static', filename='fotos_posts/' + foto.imagem) }}" alt="Foto">
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>Nenhuma foto publicada ainda. Selecione uma imagem acima para publicar seu primeiro Pin!</p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

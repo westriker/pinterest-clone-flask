@@ -1,0 +1,16 @@
+# Ambiente Virtual
+venv/
+env/
+.venv/
+
+# Banco de dados local (para não enviar dados de teste)
+instance/
+*.db
+*.sqlite3
+
+# Arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Arquivos de upload dos usuários (opcional, envie apenas se quiser ter fotos de exemplo)
+# static/fotos_posts/*
